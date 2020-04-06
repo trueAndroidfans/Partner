@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Partner</string>
+
+    <string name="action_auto_speak">自动朗读</string>
+    <string name="action_more_settings">更多设置</string>
+    <string name="text_clean_msg">清空聊天内容</string>
+    <string name="text_pressed_to_talk">按住说话</string>
+    <string name="text_talking">说话中...</string>
+    <string name="hint_auto_speak_open">已开启自动朗读</string>
+    <string name="hint_auto_speak_close">已关闭自动朗读</string>
+</resources>
