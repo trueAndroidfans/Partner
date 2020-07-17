@@ -2,9 +2,9 @@ package com.aokiji.partner.modules.chat;
 
 import android.text.TextUtils;
 
-import com.aokiji.partner.api.Api;
-import com.aokiji.partner.models.chat.ChatParams;
-import com.aokiji.partner.models.chat.ChatReturn;
+import com.aokiji.partner.models.network.api.Api;
+import com.aokiji.partner.models.entities.chat.ChatParams;
+import com.aokiji.partner.models.entities.chat.ChatReturn;
 
 import java.io.IOException;
 

@@ -33,22 +33,22 @@ import com.aokiji.partner.App;
 import com.aokiji.partner.AppModule;
 import com.aokiji.partner.R;
 import com.aokiji.partner.Settings;
-import com.aokiji.partner.adapter.MessageAdapter;
+import com.aokiji.partner.ui.adapter.MessageAdapter;
 import com.aokiji.partner.base.BaseActivity;
-import com.aokiji.partner.bdasr.AutoCheck;
-import com.aokiji.partner.bdasr.recog.MyRecognizer;
-import com.aokiji.partner.bdasr.recog.RecogResult;
-import com.aokiji.partner.bdasr.recog.listener.IRecogListener;
-import com.aokiji.partner.bdtts.control.InitConfig;
-import com.aokiji.partner.bdtts.control.MySyntherizer;
-import com.aokiji.partner.bdtts.control.NonBlockSyntherizer;
-import com.aokiji.partner.bdtts.listener.UiMessageListener;
-import com.aokiji.partner.bdtts.util.OfflineResource;
+import com.aokiji.partner.others.bdasr.AutoCheck;
+import com.aokiji.partner.others.bdasr.recog.MyRecognizer;
+import com.aokiji.partner.others.bdasr.recog.RecogResult;
+import com.aokiji.partner.others.bdasr.recog.listener.IRecogListener;
+import com.aokiji.partner.others.bdtts.control.InitConfig;
+import com.aokiji.partner.others.bdtts.control.MySyntherizer;
+import com.aokiji.partner.others.bdtts.control.NonBlockSyntherizer;
+import com.aokiji.partner.others.bdtts.listener.UiMessageListener;
+import com.aokiji.partner.others.bdtts.util.OfflineResource;
 import com.aokiji.partner.db.DatabaseHelper;
 import com.aokiji.partner.event.CleanMsgEvent;
-import com.aokiji.partner.models.chat.ChatParams;
-import com.aokiji.partner.models.chat.ChatReturn;
-import com.aokiji.partner.models.chat.Message;
+import com.aokiji.partner.models.entities.chat.ChatParams;
+import com.aokiji.partner.models.entities.chat.ChatReturn;
+import com.aokiji.partner.models.entities.chat.Message;
 import com.aokiji.partner.modules.setting.SettingActivity;
 import com.aokiji.partner.utils.KeyboardsUtil;
 import com.aokiji.partner.utils.SoftKeyboardStateHelper;
@@ -488,11 +488,11 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
         // 如果您集成中出错，请将下面一段代码放在和demo中相同的位置，并复制InitConfig 和 AutoCheck到您的项目中
         // 上线时请删除AutoCheck的调用
-        com.aokiji.partner.bdtts.util.AutoCheck.getInstance(getApplicationContext()).check(initConfig, new Handler() {
+        com.aokiji.partner.others.bdtts.util.AutoCheck.getInstance(getApplicationContext()).check(initConfig, new Handler() {
             @Override
             public void handleMessage(android.os.Message msg) {
                 if (msg.what == 100) {
-                    com.aokiji.partner.bdtts.util.AutoCheck autoCheck = (com.aokiji.partner.bdtts.util.AutoCheck) msg.obj;
+                    com.aokiji.partner.others.bdtts.util.AutoCheck autoCheck = (com.aokiji.partner.others.bdtts.util.AutoCheck) msg.obj;
                     synchronized (autoCheck) {
                         String message = autoCheck.obtainDebugMessage();
                         toPrint(message); // 可以用下面一行替代，在logcat中查看代码

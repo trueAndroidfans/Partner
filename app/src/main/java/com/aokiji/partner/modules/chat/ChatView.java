@@ -1,6 +1,6 @@
 package com.aokiji.partner.modules.chat;
 
-import com.aokiji.partner.models.chat.ChatReturn;
+import com.aokiji.partner.models.entities.chat.ChatReturn;
 
 /**
  * Created by zhangdonghai on 2018/7/31.

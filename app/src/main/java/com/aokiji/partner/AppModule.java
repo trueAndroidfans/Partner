@@ -2,9 +2,9 @@ package com.aokiji.partner;
 
 import android.content.Context;
 
-import com.aokiji.partner.api.Api;
-import com.aokiji.partner.interceptor.HeadInterceptor;
-import com.aokiji.partner.interceptor.LoggingInterceptor;
+import com.aokiji.partner.models.network.api.Api;
+import com.aokiji.partner.models.network.interceptor.HeadInterceptor;
+import com.aokiji.partner.models.network.interceptor.LoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
