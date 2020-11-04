@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aokiji.partner.R;
@@ -19,11 +20,15 @@ import butterknife.OnClick;
 public class SettingActivity extends BaseActivity {
 
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.tv_clear_msg) TextView tvClearMsg;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.rl_clear)
+    RelativeLayout rlClear;
 
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
@@ -32,9 +37,12 @@ public class SettingActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.tv_clear_msg) void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_clear_msg:
+    @OnClick(R.id.rl_clear)
+    void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.rl_clear:
                 new AlertDialog.Builder(SettingActivity.this)
                         .setMessage("确定要清除聊天记录吗?")
                         .setNegativeButton("取消", (dialogInterface, i) -> dialogInterface.dismiss())
@@ -51,11 +59,12 @@ public class SettingActivity extends BaseActivity {
     }
 
 
-    private void initView() {
+    private void initView()
+    {
+        toolbar.setTitle(R.string.text_setting);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(view -> finish());
-        toolbar.setTitle(R.string.action_more_settings);
     }
 
 }

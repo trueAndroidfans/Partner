@@ -2,32 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_grey_100"
+    android:background="@color/color_e6"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@android:color/black"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rl_clear"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_44"
         android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/md_grey_200">
+        android:background="@android:color/white">
 
         <TextView
-            android:id="@+id/tv_clear_msg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_8"
             android:background="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_10"
             android:text="@string/text_clean_msg"
-            android:textColor="@color/md_blue_A200" />
+            android:textColor="@color/color_12" />
 
-    </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_8"
+            android:src="@drawable/ic_right_arrow" />
+
+    </RelativeLayout>
 
 </LinearLayout>

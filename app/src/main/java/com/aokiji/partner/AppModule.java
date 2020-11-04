@@ -27,17 +27,23 @@ public class AppModule {
     private Context mContext;
 
 
-    public AppModule(Context mContext) {
+    public AppModule(Context mContext)
+    {
         this.mContext = mContext;
     }
 
 
-    @Provides public Context provideContext() {
+    @Provides
+    public Context provideContext()
+    {
         return mContext;
     }
 
 
-    @Provides @Singleton public Api provideApi() {
+    @Provides
+    @Singleton
+    public Api provideApi()
+    {
 //        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
 //        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()

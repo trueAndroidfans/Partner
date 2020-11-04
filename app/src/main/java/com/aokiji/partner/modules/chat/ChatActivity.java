@@ -33,8 +33,13 @@ import com.aokiji.partner.App;
 import com.aokiji.partner.AppModule;
 import com.aokiji.partner.R;
 import com.aokiji.partner.Settings;
-import com.aokiji.partner.ui.adapter.MessageAdapter;
 import com.aokiji.partner.base.BaseActivity;
+import com.aokiji.partner.db.DatabaseHelper;
+import com.aokiji.partner.event.CleanMsgEvent;
+import com.aokiji.partner.models.entities.chat.ChatParams;
+import com.aokiji.partner.models.entities.chat.ChatReturn;
+import com.aokiji.partner.models.entities.chat.Message;
+import com.aokiji.partner.modules.setting.SettingActivity;
 import com.aokiji.partner.others.bdasr.AutoCheck;
 import com.aokiji.partner.others.bdasr.recog.MyRecognizer;
 import com.aokiji.partner.others.bdasr.recog.RecogResult;
@@ -44,12 +49,7 @@ import com.aokiji.partner.others.bdtts.control.MySyntherizer;
 import com.aokiji.partner.others.bdtts.control.NonBlockSyntherizer;
 import com.aokiji.partner.others.bdtts.listener.UiMessageListener;
 import com.aokiji.partner.others.bdtts.util.OfflineResource;
-import com.aokiji.partner.db.DatabaseHelper;
-import com.aokiji.partner.event.CleanMsgEvent;
-import com.aokiji.partner.models.entities.chat.ChatParams;
-import com.aokiji.partner.models.entities.chat.ChatReturn;
-import com.aokiji.partner.models.entities.chat.Message;
-import com.aokiji.partner.modules.setting.SettingActivity;
+import com.aokiji.partner.ui.adapter.MessageAdapter;
 import com.aokiji.partner.utils.KeyboardsUtil;
 import com.aokiji.partner.utils.SoftKeyboardStateHelper;
 import com.baidu.tts.chainofresponsibility.logger.LoggerProxy;
@@ -82,19 +82,28 @@ import static com.aokiji.partner.Settings.BD_SECRETKEY;
 
 public class ChatActivity extends BaseActivity implements ChatView {
 
-    @Bind(R.id.iv_bg) ImageView ivBg;
-    @Bind(R.id.et_content) EditText etContent;
-    @Bind(R.id.rv_message) RecyclerView rvMessage;
-    @Bind(R.id.iv_voice) ImageView ivVoice;
-    @Bind(R.id.rl_panel) RelativeLayout rlPanel;
-    @Bind(R.id.ll_input) LinearLayout llInput;
-    @Bind(R.id.tv_record_state) TextView tvRecordState;
-    @Bind(R.id.iv_talking) ImageView ivTalking;
+    @Bind(R.id.iv_bg)
+    ImageView ivBg;
+    @Bind(R.id.et_content)
+    EditText etContent;
+    @Bind(R.id.rv_message)
+    RecyclerView rvMessage;
+    @Bind(R.id.iv_voice)
+    ImageView ivVoice;
+    @Bind(R.id.rl_panel)
+    RelativeLayout rlPanel;
+    @Bind(R.id.ll_input)
+    LinearLayout llInput;
+    @Bind(R.id.tv_record_state)
+    TextView tvRecordState;
+    @Bind(R.id.iv_talking)
+    ImageView ivTalking;
 
     private MessageAdapter mAdapter;
     private List<Message> mList = new ArrayList<>();
 
-    @Inject ChatPresenter mPresenter;
+    @Inject
+    ChatPresenter mPresenter;
 
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mDb;
@@ -125,7 +134,9 @@ public class ChatActivity extends BaseActivity implements ChatView {
     protected Handler mainHandler;
 
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
@@ -146,7 +157,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    private void initDependency() {
+    private void initDependency()
+    {
         DaggerChatComponent.builder()
                 .appModule(new AppModule(this))
                 .chatPresenterModule(new ChatPresenterModule(this))
@@ -155,17 +167,26 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    @OnClick({R.id.iv_voice}) void onClick(View view) {
-        switch (view.getId()) {
+    @OnClick({R.id.iv_voice})
+    void onClick(View view)
+    {
+        switch (view.getId())
+        {
             case R.id.iv_voice:
-                if (!passAll) {
+                if (!passAll)
+                {
                     initPermission();
-                } else {
-                    if (pressed) {
+                }
+                else
+                {
+                    if (pressed)
+                    {
                         ivVoice.setImageResource(R.drawable.ic_voice);
                         pressed = false;
                         rlPanel.setVisibility(View.GONE);
-                    } else {
+                    }
+                    else
+                    {
                         KeyboardsUtil.closeKeyboard(etContent, this);
                         ivVoice.setImageResource(R.drawable.ic_voice_passed);
                         pressed = true;
@@ -179,23 +200,30 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    private void initView() {
+    private void initView()
+    {
         setSupportActionBar(findViewById(R.id.toolbar));
 
         SoftKeyboardStateHelper stateHelper = new SoftKeyboardStateHelper(findViewById(R.id.root));
         stateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
-            @Override public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+            @Override
+            public void onSoftKeyboardOpened(int keyboardHeightInPx)
+            {
 
             }
 
-            @Override public void onSoftKeyboardClosed() {
+            @Override
+            public void onSoftKeyboardClosed()
+            {
                 clearEditTextFocus();
             }
         });
 
         etContent.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (!TextUtils.isEmpty(etContent.getText().toString().trim())) {
+            if (actionId == EditorInfo.IME_ACTION_DONE)
+            {
+                if (!TextUtils.isEmpty(etContent.getText().toString().trim()))
+                {
                     sendMessageToTulin(etContent.getText().toString().trim());
                     etContent.setText("");
                 }
@@ -205,7 +233,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
         });
 
         etContent.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
+            if (hasFocus)
+            {
                 ivVoice.setImageResource(R.drawable.ic_voice);
                 pressed = false;
                 rlPanel.setVisibility(View.GONE);
@@ -213,7 +242,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
         });
 
         ivTalking.setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
+            switch (event.getAction())
+            {
                 case MotionEvent.ACTION_DOWN:
                     tvRecordState.setText(R.string.text_talking);
                     float currentScaleX = ivTalking.getScaleX();
@@ -248,12 +278,15 @@ public class ChatActivity extends BaseActivity implements ChatView {
         rvMessage.setAdapter(mAdapter);
 
         rvMessage.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                if (KeyboardsUtil.isSoftInputShow(ChatActivity.this)) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                if (KeyboardsUtil.isSoftInputShow(ChatActivity.this))
+                {
                     KeyboardsUtil.closeKeyboard(etContent, ChatActivity.this);
                     clearEditTextFocus();
                 }
-                if (rlPanel.getVisibility() == View.VISIBLE) {
+                if (rlPanel.getVisibility() == View.VISIBLE)
+                {
                     ivVoice.setImageResource(R.drawable.ic_voice);
                     pressed = false;
                     rlPanel.setVisibility(View.GONE);
@@ -264,21 +297,28 @@ public class ChatActivity extends BaseActivity implements ChatView {
         });
 
         mainHandler = new Handler() {
-            @Override public void handleMessage(android.os.Message msg) {
+            @Override
+            public void handleMessage(android.os.Message msg)
+            {
                 super.handleMessage(msg);
             }
         };
     }
 
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case android.R.id.home:
                 break;
             case R.id.action_auto_speak:
@@ -297,7 +337,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
         return true;
     }
 
-    private void initData() {
+    private void initData()
+    {
         mPresenter.getChatBg();
 
         mDatabaseHelper = new DatabaseHelper(this, "MessageBox.db", null, 1);
@@ -306,8 +347,10 @@ public class ChatActivity extends BaseActivity implements ChatView {
         //查询Message表中的所有数据
         Cursor cursor = mDb.query("Message", null, null, null, null, null, null);
         List<Message> list = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            do {
+        if (cursor.moveToFirst())
+        {
+            do
+            {
                 int sender = cursor.getInt(cursor.getColumnIndex("sender"));
                 String content = cursor.getString(cursor.getColumnIndex("message"));
                 Message message = new Message();
@@ -315,20 +358,24 @@ public class ChatActivity extends BaseActivity implements ChatView {
                 message.setHead(sender == 0 ? R.drawable.self : R.drawable.robot);
                 message.setMessage(content);
                 list.add(message);
-            } while (cursor.moveToNext());
+            }
+            while (cursor.moveToNext());
         }
-        if (!cursor.isClosed()) {
+        if (!cursor.isClosed())
+        {
             cursor.close();
         }
         mList.addAll(list);
-        if (!mList.isEmpty()) {
+        if (!mList.isEmpty())
+        {
             mAdapter.notifyDataSetChanged();
             rvMessage.smoothScrollToPosition(mList.size() - 1);
         }
     }
 
 
-    private void initPermission() {
+    private void initPermission()
+    {
         String[] permissions = {
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.ACCESS_NETWORK_STATE,
@@ -341,24 +388,33 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
         ArrayList<String> toApplyList = new ArrayList<>();
 
-        for (String perm : permissions) {
-            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, perm)) {
+        for (String perm : permissions)
+        {
+            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, perm))
+            {
                 toApplyList.add(perm);
             }
         }
         String[] tmpList = new String[toApplyList.size()];
-        if (!toApplyList.isEmpty()) {
+        if (!toApplyList.isEmpty())
+        {
             ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 123);
         }
     }
 
 
-    @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        switch (requestCode)
+        {
             case 123:
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < grantResults.length; i++) {
-                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0)
+                {
+                    for (int i = 0; i < grantResults.length; i++)
+                    {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
+                        {
                             passAll = false;
                         }
                     }
@@ -368,71 +424,102 @@ public class ChatActivity extends BaseActivity implements ChatView {
                 break;
         }
 
-        if (!passAll) {
+        if (!passAll)
+        {
             Toast.makeText(this, "一些权限缺失", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private void initASR() {
+    private void initASR()
+    {
         // 新建一个回调类，识别引擎会回调这个类告知重要状态和识别结果
         IRecogListener listener = new IRecogListener() {
-            @Override public void onAsrReady() {
+            @Override
+            public void onAsrReady()
+            {
 
             }
 
-            @Override public void onAsrBegin() {
+            @Override
+            public void onAsrBegin()
+            {
 
             }
 
-            @Override public void onAsrEnd() {
+            @Override
+            public void onAsrEnd()
+            {
 
             }
 
-            @Override public void onAsrPartialResult(String[] results, RecogResult recogResult) {
+            @Override
+            public void onAsrPartialResult(String[] results, RecogResult recogResult)
+            {
 
             }
 
-            @Override public void onAsrOnlineNluResult(String nluResult) {
+            @Override
+            public void onAsrOnlineNluResult(String nluResult)
+            {
 
             }
 
-            @Override public void onAsrFinalResult(String[] results, RecogResult recogResult) {
-                if (results.length > 0) {
+            @Override
+            public void onAsrFinalResult(String[] results, RecogResult recogResult)
+            {
+                if (results.length > 0)
+                {
                     sendMessageToTulin(results[0]);
                 }
                 stop();
             }
 
-            @Override public void onAsrFinish(RecogResult recogResult) {
+            @Override
+            public void onAsrFinish(RecogResult recogResult)
+            {
 
             }
 
-            @Override public void onAsrFinishError(int errorCode, int subErrorCode, String descMessage, RecogResult recogResult) {
+            @Override
+            public void onAsrFinishError(int errorCode, int subErrorCode, String descMessage, RecogResult recogResult)
+            {
 
             }
 
-            @Override public void onAsrLongFinish() {
+            @Override
+            public void onAsrLongFinish()
+            {
 
             }
 
-            @Override public void onAsrVolume(int volumePercent, int volume) {
+            @Override
+            public void onAsrVolume(int volumePercent, int volume)
+            {
 
             }
 
-            @Override public void onAsrAudio(byte[] data, int offset, int length) {
+            @Override
+            public void onAsrAudio(byte[] data, int offset, int length)
+            {
 
             }
 
-            @Override public void onAsrExit() {
+            @Override
+            public void onAsrExit()
+            {
 
             }
 
-            @Override public void onOfflineLoaded() {
+            @Override
+            public void onOfflineLoaded()
+            {
 
             }
 
-            @Override public void onOfflineUnLoaded() {
+            @Override
+            public void onOfflineUnLoaded()
+            {
 
             }
         };
@@ -441,17 +528,21 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    protected void start() {
+    protected void start()
+    {
         // 拼接识别参数
         final Map<String, Object> params = new HashMap<>();
         params.put("accept-audio-volume", false);
         Logger.i("设置的start输入参数：" + params);
         // 复制此段可以自动检测常规错误
         (new AutoCheck(getApplicationContext(), new Handler() {
-            public void handleMessage(android.os.Message msg) {
-                if (msg.what == 100) {
+            public void handleMessage(android.os.Message msg)
+            {
+                if (msg.what == 100)
+                {
                     AutoCheck autoCheck = (AutoCheck) msg.obj;
-                    synchronized (autoCheck) {
+                    synchronized (autoCheck)
+                    {
                         String message = autoCheck.obtainErrorMessage(); // autoCheck.obtainAllMessage();
                         Log.w("AutoCheckMessage", message);
                     }
@@ -464,17 +555,20 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    protected void stop() {
+    protected void stop()
+    {
         myRecognizer.stop();
     }
 
 
-    protected void cancel() {
+    protected void cancel()
+    {
         myRecognizer.cancel();
     }
 
 
-    private void initTTS() {
+    private void initTTS()
+    {
         LoggerProxy.printable(true); // 日志打印在logcat中
         // 设置初始化参数
         // 此处可以改为 含有您业务逻辑的SpeechSynthesizerListener的实现类
@@ -490,10 +584,13 @@ public class ChatActivity extends BaseActivity implements ChatView {
         // 上线时请删除AutoCheck的调用
         com.aokiji.partner.others.bdtts.util.AutoCheck.getInstance(getApplicationContext()).check(initConfig, new Handler() {
             @Override
-            public void handleMessage(android.os.Message msg) {
-                if (msg.what == 100) {
+            public void handleMessage(android.os.Message msg)
+            {
+                if (msg.what == 100)
+                {
                     com.aokiji.partner.others.bdtts.util.AutoCheck autoCheck = (com.aokiji.partner.others.bdtts.util.AutoCheck) msg.obj;
-                    synchronized (autoCheck) {
+                    synchronized (autoCheck)
+                    {
                         String message = autoCheck.obtainDebugMessage();
                         toPrint(message); // 可以用下面一行替代，在logcat中查看代码
                         // Log.w("AutoCheckMessage", message);
@@ -511,7 +608,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
      *
      * @return
      */
-    protected Map<String, String> getParams() {
+    protected Map<String, String> getParams()
+    {
         Map<String, String> params = new HashMap<String, String>();
         // 以下参数均为选填
         // 设置在线发声音人： 0 普通女声（默认） 1 普通男声 2 特别男声 3 情感男声<度逍遥> 4 情感儿童声<度丫丫>
@@ -540,11 +638,15 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    protected OfflineResource createOfflineResource(String voiceType) {
+    protected OfflineResource createOfflineResource(String voiceType)
+    {
         OfflineResource offlineResource = null;
-        try {
+        try
+        {
             offlineResource = new OfflineResource(this, voiceType);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             // IO 错误自行处理
             e.printStackTrace();
             toPrint("【error】:copy files from assets failed." + e.getMessage());
@@ -558,7 +660,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
      * 获取音频流的方式见SaveFileActivity及FileSaveListener
      * 需要合成的文本text的长度不能超过1024个GBK字节。
      */
-    private void speak(String content) {
+    private void speak(String content)
+    {
         // 合成前可以修改参数：
         // Map<String, String> params = getParams();
         // synthesizer.setParams(params);
@@ -570,27 +673,32 @@ public class ChatActivity extends BaseActivity implements ChatView {
     /*
      * 停止合成引擎。即停止播放，合成，清空内部合成队列。
      */
-    private void stopSynthesiz() {
+    private void stopSynthesiz()
+    {
         int result = synthesizer.stop();
         checkResult(result, "stop");
     }
 
 
-    private void checkResult(int result, String method) {
-        if (result != 0) {
+    private void checkResult(int result, String method)
+    {
+        if (result != 0)
+        {
             toPrint("error code :" + result + " method:" + method + ", 错误码文档:http://yuyin.baidu.com/docs/tts/122 ");
         }
     }
 
 
-    protected void toPrint(String str) {
+    protected void toPrint(String str)
+    {
         android.os.Message msg = android.os.Message.obtain();
         msg.obj = str;
         mainHandler.sendMessage(msg);
     }
 
 
-    private void sendMessageToTulin(String msg) {
+    private void sendMessageToTulin(String msg)
+    {
         ChatParams.Perception.InputText inputText = new ChatParams.Perception.InputText();
         inputText.setText(msg);
         ChatParams.Perception perception = new ChatParams.Perception();
@@ -625,22 +733,29 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    private void clearEditTextFocus() {
+    private void clearEditTextFocus()
+    {
         llInput.requestFocus();
         llInput.setFocusableInTouchMode(true);
     }
 
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume()
+    {
         super.onResume();
         getWindow().getDecorView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             Rect rect = new Rect();
             getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-            if (bottom != 0 && oldBottom != 0 && bottom - rect.bottom <= 0) {
+            if (bottom != 0 && oldBottom != 0 && bottom - rect.bottom <= 0)
+            {
                 // 隐藏
-            } else {
+            }
+            else
+            {
                 // 显示
-                if (!mList.isEmpty()) {
+                if (!mList.isEmpty())
+                {
                     rvMessage.smoothScrollToPosition(mList.size() - 1);
                 }
             }
@@ -648,10 +763,14 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    @Override public void onSuccess(ChatReturn data) {
+    @Override
+    public void onSuccess(ChatReturn data)
+    {
         List<ChatReturn.Item> list = data.getResults();
-        if (list != null && !list.isEmpty()) {
-            for (int i = 0; i < list.size(); i++) {
+        if (list != null && !list.isEmpty())
+        {
+            for (int i = 0; i < list.size(); i++)
+            {
                 Message message = new Message();
                 message.setFromFriend(true);
                 message.setHead(R.drawable.robot);
@@ -666,7 +785,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
                 mDb.insert("Message", null, values);
                 values.clear();
 
-                if (AUTO_SPEAK) {
+                if (AUTO_SPEAK)
+                {
                     speak(list.get(i).getValues().getText());
                 }
             }
@@ -676,12 +796,16 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    @Override public void onFail(Throwable throwable) {
+    @Override
+    public void onFail(Throwable throwable)
+    {
         Logger.e(throwable.getMessage());
     }
 
 
-    @Override public void getBgSuccess(String url) {
+    @Override
+    public void getBgSuccess(String url)
+    {
         runOnUiThread(() ->
                 Glide.with(this)
                         .load(url)
@@ -695,14 +819,18 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    @Override public void getBgFail(Throwable throwable) {
+    @Override
+    public void getBgFail(Throwable throwable)
+    {
         Logger.e(throwable.getMessage());
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(CleanMsgEvent event) {
-        if (event != null) {
+    public void onMessageEvent(CleanMsgEvent event)
+    {
+        if (event != null)
+        {
             mList.clear();
             mAdapter.notifyDataSetChanged();
 
@@ -712,7 +840,9 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy()
+    {
         myRecognizer.release();
         synthesizer.release();
         EventBus.getDefault().unregister(this);

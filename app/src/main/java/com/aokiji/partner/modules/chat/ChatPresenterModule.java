@@ -13,12 +13,15 @@ public class ChatPresenterModule {
     private ChatView chatView;
 
 
-    public ChatPresenterModule(ChatView chatView) {
+    public ChatPresenterModule(ChatView chatView)
+    {
         this.chatView = chatView;
     }
 
 
-    @Provides public ChatView provideChatView() {
+    @Provides
+    public ChatView provideChatView()
+    {
         return chatView;
     }
 

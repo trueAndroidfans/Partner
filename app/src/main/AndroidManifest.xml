@@ -18,12 +18,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".modules.chat.ChatActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
+            android:theme="@style/BlackStatusBarTheme"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +40,8 @@
         <activity
             android:name=".modules.setting.SettingActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/BlackStatusBarTheme" />
 
         <meta-data
             android:name="com.baidu.speech.APP_ID"

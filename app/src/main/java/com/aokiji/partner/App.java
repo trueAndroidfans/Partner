@@ -13,12 +13,15 @@ public class App extends Application {
 
     private static App sApp;
 
-    public static App getInstance() {
+    public static App getInstance()
+    {
         return sApp;
     }
 
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate()
+    {
         super.onCreate();
         sApp = this;
 
@@ -26,7 +29,8 @@ public class App extends Application {
     }
 
 
-    private void init() {
+    private void init()
+    {
         Logger.addLogAdapter(new AndroidLogAdapter());
     }
 }

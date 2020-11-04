@@ -29,20 +29,27 @@ public class ChatPresenter {
     private ChatView chatView;
 
 
-    @Inject public ChatPresenter(Api mApi, ChatView chatView) {
+    @Inject
+    public ChatPresenter(Api mApi, ChatView chatView)
+    {
         this.mApi = mApi;
         this.chatView = chatView;
     }
 
 
-    public void chat(ChatParams params) {
+    public void chat(ChatParams params)
+    {
         mApi.chat(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<ChatReturn>() {
-                    @Override public void accept(ChatReturn data) throws Exception {
-                        if (chatView != null) {
-                            if (data != null) {
+                    @Override
+                    public void accept(ChatReturn data) throws Exception
+                    {
+                        if (chatView != null)
+                        {
+                            if (data != null)
+                            {
                                 chatView.onSuccess(data);
                             }
                         }
@@ -51,20 +58,28 @@ public class ChatPresenter {
     }
 
 
-    public void getChatBg() {
+    public void getChatBg()
+    {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url("http://guolin.tech/api/bing_pic").build();
         client.newCall(request).enqueue(new Callback() {
-            @Override public void onFailure(Call call, IOException e) {
-                if (chatView != null) {
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                if (chatView != null)
+                {
                     chatView.getBgFail(new Throwable(e));
                 }
             }
 
-            @Override public void onResponse(Call call, Response response) throws IOException {
-                if (chatView != null) {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+                if (chatView != null)
+                {
                     String url = response.body().string();
-                    if (!TextUtils.isEmpty(url)) {
+                    if (!TextUtils.isEmpty(url))
+                    {
                         chatView.getBgSuccess(url);
                     }
                 }

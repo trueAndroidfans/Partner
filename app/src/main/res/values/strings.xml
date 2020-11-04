@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Partner</string>
+    <string name="app_name">聊天机器人</string>
 
     <string name="action_auto_speak">自动朗读</string>
     <string name="action_more_settings">更多设置</string>
@@ -8,4 +8,5 @@
     <string name="text_talking">说话中...</string>
     <string name="hint_auto_speak_open">已开启自动朗读</string>
     <string name="hint_auto_speak_close">已关闭自动朗读</string>
+    <string name="text_setting">设置</string>
 </resources>

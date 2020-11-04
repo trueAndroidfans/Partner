@@ -29,25 +29,33 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private OnElementClickListener onElementClickListener;
 
-    public void setOnElementClickListener(OnElementClickListener onElementClickListener) {
+    public void setOnElementClickListener(OnElementClickListener onElementClickListener)
+    {
         this.onElementClickListener = onElementClickListener;
     }
 
 
-    public MessageAdapter(List<Message> list, Context context) {
+    public MessageAdapter(List<Message> list, Context context)
+    {
         this.mList = list;
         this.mContext = context;
     }
 
 
-    @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_message, parent, false));
     }
 
 
-    @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
+    {
         Message message = mList.get(position);
-        if (message.isFromFriend()) {
+        if (message.isFromFriend())
+        {
             holder.friend.setVisibility(View.VISIBLE);
             holder.self.setVisibility(View.GONE);
             Glide.with(mContext)
@@ -59,7 +67,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     .transform(new GlideCircleTransform(mContext))
                     .into(holder.ivFriendHead);
             holder.tvFriendMessage.setText(message.getMessage());
-        } else {
+        }
+        else
+        {
             holder.friend.setVisibility(View.GONE);
             holder.self.setVisibility(View.VISIBLE);
             Glide.with(mContext)
@@ -73,13 +83,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.tvSelfMessage.setText(message.getMessage());
         }
 
-        if (onElementClickListener != null) {
+        if (onElementClickListener != null)
+        {
             holder.ivSpeak.setOnClickListener(v -> onElementClickListener.onElementClick(holder.ivSpeak, holder.getLayoutPosition()));
         }
     }
 
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount()
+    {
         return mList.size();
     }
 
@@ -90,7 +103,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         ImageView ivFriendHead, ivSpeak, ivSelfHead;
         TextView tvFriendMessage, tvSelfMessage;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView)
+        {
             super(itemView);
             friend = itemView.findViewById(R.id.ll_friend);
             self = itemView.findViewById(R.id.ll_self);
